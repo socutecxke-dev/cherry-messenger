@@ -6,6 +6,7 @@ import com.cherry.messenger.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +25,10 @@ public class ChatService {
     public Chat getChatById(Long id) {
         return chatRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Чат не найден"));
+    }
+
+    public List<Chat> getChatsForUser(User user) {
+        // Пока возвращаем все чаты
+        return chatRepository.findAll();
     }
 }

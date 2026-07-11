@@ -1,11 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Чаты</title>
+    <title>Мои чаты</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .chat-list { list-style: none; padding: 0; }
+        .chat-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        .chat-item:hover { background: #f5f5f5; }
+        .chat-item a {
+            text-decoration: none;
+            color: #2c3e50;
+            display: block;
+        }
+        .chat-name { font-weight: bold; font-size: 18px; }
+        .chat-meta { color: #7f8c8d; font-size: 14px; }
+        .create-form {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .create-form input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .create-form button {
+            padding: 10px 20px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .logout { color: #e74c3c; text-decoration: none; }
+    </style>
 </head>
 <body>
-<h1>Привет, <span th:text="${#authentication.name}"></span>!</h1>
-<p>Тут будут твои чаты.</p>
-<a href="/logout">Выйти</a>
+<div class="header">
+    <h1>Привет, <span th:text="${username}"></span>!</h1>
+    <a href="/logout" class="logout">Выйти</a>
+</div>
+
+<!-- Форма создания чата -->
+<div class="create-form">
+    <h3>Создать новый чат</h3>
+    <form action="/chats/create" method="post">
+        <input type="text" name="name" placeholder="Название чата..." required>
+        <button type="submit">Создать</button>
+    </form>
+</div>
+
+<!-- Список чатов -->
+<h2>Мои чаты</h2>
+<ul class="chat-list">
+    <li th:each="chat : ${chats}" class="chat-item">
+        <a th:href="@{/chats/{id}(id=${chat.id})}">
+            <div class="chat-name" th:text="${chat.name}">Название чата</div>
+            <div class="chat-meta">
+                Создан: <span th:text="${chat.createdAt}"></span>
+            </div>
+        </a>
+    </li>
+</ul>
+
+<div th:if="${chats.empty}">
+    <p>У вас пока нет чатов. Создайте первый!</p>
+</div>
 </body>
 </html>
