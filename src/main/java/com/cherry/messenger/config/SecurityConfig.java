@@ -19,22 +19,14 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> {
-            System.out.println("🔍 ИЩЕМ ПОЛЬЗОВАТЕЛЯ: " + username);
-            return userRepository.findByUsername(username)
-                    .map(user -> {
-                        System.out.println("✅ ПОЛЬЗОВАТЕЛЬ НАЙДЕН: " + user.getUsername());
-                        return org.springframework.security.core.userdetails.User
-                                .withUsername(user.getUsername())
-                                .password(user.getPassword())
-                                .roles("USER")
-                                .build();
-                    })
-                    .orElseThrow(() -> {
-                        System.out.println("❌ ПОЛЬЗОВАТЕЛЬ НЕ НАЙДЕН: " + username);
-                        return new UsernameNotFoundException("User not found");
-                    });
-        };
+        return username -> userRepository.findByUsername(username)
+                .map(user -> org.springframework.security.core.userdetails.User
+                        .withUsername(user.getUsername())
+                        .password(user.getPassword())
+                        .roles("USER")
+                        .build()
+                )
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean
@@ -51,15 +43,15 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/chats", true)  // <- ЭТО ДОЛЖНО РАБОТАТЬ
-                        .failureUrl("/login?error=true")    // <- ДОБАВИЛ
+                        .defaultSuccessUrl("/chats", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
-                .csrf(csrf -> csrf.disable());  // <- ВРЕМЕННО ОТКЛЮЧАЕМ CSRF
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }

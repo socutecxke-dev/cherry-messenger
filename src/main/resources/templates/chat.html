@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Чат</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 20px auto; }
+        .message { border-bottom: 1px solid #ddd; padding: 10px 0; }
+        .sender { font-weight: bold; color: #2c3e50; }
+        .time { color: #7f8c8d; font-size: 12px; }
+        .message-form { margin-top: 20px; }
+        input[type="text"] { width: 80%; padding: 10px; }
+        button { padding: 10px 20px; background: #3498db; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+<h1>Чат: <span th:text="${chat.name}"></span></h1>
+<a href="/chats">← Назад к списку чатов</a>
+
+<div id="messages" style="margin: 20px 0;">
+    <div th:each="msg : ${messages}" class="message">
+        <span class="sender" th:text="${msg.sender.username}"></span>
+        <span class="time" th:text="${msg.sentAt}"></span>
+        <p th:text="${msg.content}"></p>
+    </div>
+</div>
+
+<form class="message-form" action="#" th:action="@{/chats/{id}/send(id=${chat.id})}" method="post">
+    <input type="text" name="content" placeholder="Введите сообщение..." required>
+    <button type="submit">Отправить</button>
+</form>
+</body>
+</html>
