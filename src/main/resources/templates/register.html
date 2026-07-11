@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Регистрация</title>
+    <style>
+        body { font-family: Arial; max-width: 400px; margin: 50px auto; }
+        input { display: block; width: 100%; padding: 10px; margin: 10px 0; }
+        button { background: #4CAF50; color: white; padding: 10px; border: none; width: 100%; cursor: pointer; }
+        .error { color: red; }
+        a { color: #008CBA; text-decoration: none; }
+    </style>
+</head>
+<body>
+<h2>Регистрация</h2>
+<div th:if="${error}" class="error" th:text="${error}"></div>
+<form action="/register" method="post">
+    <input type="text" name="username" placeholder="Логин" required>
+    <input type="password" name="password" placeholder="Пароль" required>
+    <button type="submit">Зарегистрироваться</button>
+</form>
+<p>Уже есть аккаунт? <a href="/login">Войти</a></p>
+</body>
+</html>
